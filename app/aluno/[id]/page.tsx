@@ -7,19 +7,7 @@ import { BookOpen, PenBox, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getAluno, updateAluno } from "./actions";
-
-function normalizeCurso(curso: CursoData): CursoData {
-  return {
-    id: curso.id,
-    nome: curso.nome,
-    professor: curso.professor,
-    cargaHoraria: curso.cargaHoraria,
-    descricao: curso.descricao,
-    createdAt: curso.createdAt,
-    updatedAt: curso.updatedAt,
-  };
-}
+import { addCursoToAluno, getAluno } from "./actions";
 
 export default function AlunoPage() {
   const { id } = useParams();
@@ -70,33 +58,30 @@ export default function AlunoPage() {
     setSaving(true);
     setError("");
 
-    const response = await updateAluno(Number(id), {
-      ...aluno,
-      cursos: [
-        ...(aluno.cursos ?? []).map(normalizeCurso),
-        normalizeCurso(cursoSelecionado),
-      ],
-    });
+    const response = await addCursoToAluno(
+      Number(id),
+      Number(cursoSelecionadoId)
+    );
 
-    setSaving(false);
-
-    if (response) {
+    if (typeof response === "string") {
+      setSaving(false);
       setError(
-        typeof response === "string"
-          ? response
-          : "Nao foi possivel adicionar o curso ao aluno."
+        response || "Nao foi possivel adicionar o curso ao aluno."
       );
       return;
     }
 
-    try {
-      const alunoAtualizado = await getAluno(Number(id));
-      setAluno(alunoAtualizado);
-      setCursoSelecionadoId("");
-    } catch (loadError) {
-      console.error(loadError);
-      setError("Curso salvo, mas nao foi possivel recarregar o aluno.");
+    if (response) {
+      setAluno(response);
+    } else {
+      setAluno((currentAluno) => ({
+        ...currentAluno,
+        cursos: [...(currentAluno.cursos ?? []), cursoSelecionado],
+      }));
     }
+
+    setSaving(false);
+    setCursoSelecionadoId("");
   }
 
   return (
