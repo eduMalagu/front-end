@@ -1,4 +1,4 @@
-import { BookOpen, Clock3, GraduationCap, UserRound } from "lucide-react";
+import { BookOpen, Clock3, GraduationCap, PenBox, UserRound, Users } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -26,20 +26,46 @@ export default async function CursoPage({
     <div className="page-shell screen flex items-center justify-center">
       <div className="panel max-w-5xl overflow-hidden">
         <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-sky-500 px-8 py-8 text-white">
-          <p className="section-label text-white/80">Detalhes do curso</p>
-          <h1 className="mt-3 text-4xl font-bold md:text-5xl">{curso.nome}</h1>
-          <p className="mt-4 max-w-3xl text-white/85">{curso.descricao}</p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="section-label text-white/80">Detalhes do curso</p>
+              <h1 className="mt-3 text-4xl font-bold md:text-5xl">{curso.nome}</h1>
+              <p className="mt-4 max-w-3xl text-white/85">{curso.descricao}</p>
+            </div>
 
-          <div className="mt-6 flex flex-wrap gap-3 text-sm text-white/90">
-            <span className="rounded-full bg-white/15 px-3 py-1">
-              Professor: {curso.professor || "Nao informado"}
-            </span>
-            <span className="rounded-full bg-white/15 px-3 py-1">
-              Carga horaria: {curso.cargaHoraria}h
-            </span>
-            <span className="rounded-full bg-white/15 px-3 py-1">
-              Alunos matriculados: {curso.alunos?.length ?? 0}
-            </span>
+            <Link
+              href={`/curso/${curso.id}/editar`}
+              className="rounded-full bg-white/15 p-3 transition hover:bg-white/25"
+            >
+              <PenBox />
+            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-3 md:grid-cols-3">
+            <div className="rounded-2xl bg-white/14 px-4 py-4 backdrop-blur-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
+                Professor
+              </p>
+              <p className="mt-2 text-base font-semibold text-white">
+                {curso.professor || "Nao informado"}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white/14 px-4 py-4 backdrop-blur-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
+                Carga horaria
+              </p>
+              <p className="mt-2 text-base font-semibold text-white">
+                {curso.cargaHoraria} horas
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white/14 px-4 py-4 backdrop-blur-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
+                Matriculas
+              </p>
+              <p className="mt-2 text-base font-semibold text-white">
+                {curso.alunos?.length ?? 0} aluno(s)
+              </p>
+            </div>
           </div>
         </div>
 
@@ -68,6 +94,16 @@ export default async function CursoPage({
                 </div>
                 <p className="mt-2 text-lg font-semibold text-slate-900">
                   {curso.cargaHoraria} horas
+                </p>
+              </div>
+
+              <div className="list-card">
+                <div className="flex items-center gap-2 text-slate-500">
+                  <Users size={16} />
+                  <span className="text-sm font-medium">Alunos matriculados</span>
+                </div>
+                <p className="mt-2 text-lg font-semibold text-slate-900">
+                  {curso.alunos?.length ?? 0}
                 </p>
               </div>
 
