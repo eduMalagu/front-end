@@ -1,31 +1,35 @@
-export default function AlunosPage() {
+import AlunoItem from "@/components/AlunoItem";
+import Link from "next/link";
+
+import { getAlunos } from "./actions";
+
+export default async function AlunosPage() {
+  const alunos = await getAlunos();
+
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
-      <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-md">
-        <h1 className="mb-2 text-3xl font-bold text-gray-800">
-          Lista da sala
-        </h1>
-
-        <p className="mb-2 text-sm font-medium text-gray-700">
+    <div className="page-shell screen flex flex-col items-center text-white">
+      <div className="mb-8 w-full max-w-5xl">
+        <p className="section-label text-sky-300">Alunos</p>
+        <h1 className="mt-3 text-4xl font-bold tracking-wide md:text-5xl">
           Lista de alunos
+        </h1>
+        <p className="mt-3 max-w-2xl text-slate-300">
+          Acompanhe os cadastros e entre nos detalhes de cada aluno com um
+          visual mais limpo.
         </p>
+      </div>
 
-        <p className="mb-6 text-sm text-gray-600">
-          Alunos cadastrados na turma:
-        </p>
-
-        <ul className="space-y-3">
-          <li className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-gray-700">
-            Aluno 1
-          </li>
-          <li className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-gray-700">
-            Aluno 2
-          </li>
-          <li className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-gray-700">
-            Aluno 3
-          </li>
+      <div className="panel h-100 max-w-5xl overflow-auto p-4">
+        <ul className="flex flex-col gap-2">
+          {alunos.map((aluno) => (
+            <AlunoItem key={aluno.id} nome={aluno.nome} id={aluno.id} />
+          ))}
         </ul>
       </div>
-    </main>
+
+      <Link href="/aluno/cadastro" className="button-primary mt-6">
+        Cadastrar aluno
+      </Link>
+    </div>
   );
 }

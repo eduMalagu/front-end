@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteAluno } from "@/app/alunos/actions";
+import { deleteCurso } from "@/app/cursos/actions";
 import { Trash } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,23 +10,24 @@ interface Props {
   nome: string;
 }
 
-export default function AlunoItem({ id, nome }: Props) {
+export default function CursoItem({ id, nome }: Props) {
   const router = useRouter();
 
   async function handleDelete() {
-    await deleteAluno(id);
+    await deleteCurso(id);
     router.refresh();
   }
 
   return (
     <li className="list-none">
-      <div className="list-card flex items-center justify-between hover:border-sky-200">
+      <div className="list-card flex items-center justify-between hover:border-emerald-200">
         <Link
-          href={`/aluno/${id}`}
-          className="font-medium text-slate-800 transition hover:text-sky-600"
+          href={`/curso/${id}`}
+          className="font-medium text-slate-800 transition hover:text-emerald-600"
         >
           {nome}
         </Link>
+
         <button
           className="button-danger rounded-full p-2"
           onClick={handleDelete}

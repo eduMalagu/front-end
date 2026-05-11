@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -12,7 +12,8 @@ export default function LoginForm({ onSend }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function handleSubmit() {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     const response = await onSend(email, password);
 
     if (response) {
@@ -24,28 +25,34 @@ export default function LoginForm({ onSend }: Props) {
   }
 
   return (
-    <div className="w-[90%] h-100 bg-white rounded-md shadow-md shadow-white text-black py-28 px-10 overflow-auto flex flex-col items-center justify-between">
-      <input
-        type="email"
-        placeholder="Email"
-        className="w-full border border-black"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Senha"
-        className="w-full border border-black"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+    <form className="form-card max-w-md" onSubmit={handleSubmit}>
+      <div className="mb-8">
+        <h2 className="text-3xl font-bold text-slate-900">Entrar</h2>
+        <p className="mt-2 text-slate-600">
+          Use seu email e sua senha para acessar o sistema.
+        </p>
+      </div>
 
-      <button
-        className="bg-black text-white rounded-xl px-10 py-2 cursor-pointer hover:opacity-80"
-        onClick={handleSubmit}
-      >
-        Entrar
-      </button>
-    </div>
+      <div className="flex flex-col gap-4">
+        <input
+          type="email"
+          placeholder="Email"
+          className="field"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          className="field"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button className="button-primary mt-2" type="submit">
+          Entrar
+        </button>
+      </div>
+    </form>
   );
 }
